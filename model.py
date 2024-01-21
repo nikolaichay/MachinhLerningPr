@@ -8,6 +8,7 @@ from keras.constraints import MaxNorm
 import tensorflow as tf
 import numpy as np
 import idx2numpy
+import matplotlib.pyplot as plt
 from PIL import Image
 import pytesseract
 import cv2
@@ -60,7 +61,6 @@ def emnist_train(model):
     y_test_cat = keras.utils.to_categorical(y_test, len(emnist_labels))
 
     learning_rate_reduction = keras.callbacks.ReduceLROnPlateau(monitor='val_accuracy', patience=3, verbose=1, factor=0.5, min_lr=0.00001)
-
     model.fit(X_train, x_train_cat, validation_data=(X_test, y_test_cat), callbacks=[learning_rate_reduction], batch_size=64, epochs=30)
     print("Training done, dT:", time.time() - t_start)
 
@@ -131,10 +131,10 @@ def img_to_str(model: any, image_file: str):
     return s_out
 
 
-# model = emnist_model()
-# emnist_train(model)
-# model.save('emnist_letters.h5')
-image_file = "text.jpg"
-model = keras.models.load_model('emnist_letters.h5')
-s_out = img_to_str(model, image_file)
-print(s_out)
+model = emnist_model()
+emnist_train(model)
+model.save('emnist_letters.h5')
+# image_file = "text.jpg"
+# model = keras.models.load_model('emnist_letters.h5')
+# s_out = img_to_str(model, image_file)
+# print(s_out)
